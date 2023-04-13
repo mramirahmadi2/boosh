@@ -1,23 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
-
+import "./App.css";
+import {  StyledEngineProvider, Typography } from "@mui/material";
+import AppRoute from "./router/App.route";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div dir="rtl"  style={{marginTop:"80px",marginRight:"11%"}}>
+      <StyledEngineProvider injectFirst > 
+        <Typography component={'span'} >          
+          <AppRoute  />
+        </Typography>
+      </StyledEngineProvider>
     </div>
   );
 }
