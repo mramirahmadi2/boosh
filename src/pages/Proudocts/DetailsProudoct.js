@@ -17,7 +17,8 @@ import { useEffect, useState } from "react";
 const DetailsProudocts = () => {
   const count = useSelector((state) => state.counter.value);
   const [buy, okBuy] = useState(false);
-  const [order, setOrder] = useState(0)
+  const [order, setOrder] = useState(0);
+  
   const dispatch = useDispatch();
   const { id } = useParams();
   const {
@@ -31,7 +32,52 @@ const DetailsProudocts = () => {
   const handleAddToCart = () => {
     okBuy(true);
     dispatch(increment());
-    setOrder(order + 1)
+    setOrder(order + 1);
+    let basketProduct = {
+      title: books.title,
+      group: books.group,
+      writer: books.writer,
+      price: books.price,
+      number: 1,
+      image: books.image,
+    };
+    localStorage.setItem(books.title, JSON.stringify(basketProduct));
+    if (localStorage.getItem(books.title)) {
+      alert(`کتاب ${basketProduct.title} در سبد خرید قرار گرفت`);
+    }
+  };
+  const Add = () => {
+    localStorage.removeItem(books.title);
+    dispatch(increment());
+    setOrder(order + 1);
+    let basketProduct = {
+      title: books.title,
+      group: books.group,
+      writer: books.writer,
+      price: books.price,
+      number: order + 1,
+      image: books.image,
+    };
+    localStorage.setItem(books.title, JSON.stringify(basketProduct));
+  };
+  const Decrease = () => {
+    localStorage.removeItem(books.title);
+    dispatch(decrement());
+    setOrder(order - 1);
+    let basketProduct = {
+      title: books.title,
+      group: books.group,
+      writer: books.writer,
+      price: books.price,
+      number: order - 1,
+      image: books.image,
+    };
+    if (order === 1) {
+      okBuy(false);
+      localStorage.removeItem(books.title);
+    } else {
+      localStorage.setItem(books.title, JSON.stringify(basketProduct));
+    }
   };
   useEffect(() => {
     if (!buy) {
@@ -57,14 +103,16 @@ const DetailsProudocts = () => {
                   flexDirection: "column",
                   alignItems: "center",
                 }}
-              >
+              >{books.image && (
                 <img
-                  src={`http://localhost:3002/files/${books.image}`}
-                  srcSet={`http://localhost:3002/files/${books.image}`}
+                  src={`http://localhost:3002/files/${books.image.replace('/files/', '')}`}
+                  srcSet={`http://localhost:3002/files/${books.image.replace('/files/', '')}`}
                   alt={books.title}
                   loading="lazy"
                   style={{ width: "60%", marginLeft: "50px" }}
                 />
+              )}
+              
                 <Container
                   sx={{
                     display: "flex",
@@ -121,8 +169,8 @@ const DetailsProudocts = () => {
               }}
             >
               <img
-                src={`http://localhost:3002/files/${books.image}`}
-                srcSet={`http://localhost:3002/files/${books.image}`}
+                src={`http://localhost:3002/files/${books.image.replace('/files/', '')}`}
+                srcSet={`http://localhost:3002/files/${books.image.replace('/files/', '')}`}
                 alt={books.title}
                 loading="lazy"
                 style={{ width: "30%" }}
@@ -145,16 +193,8 @@ const DetailsProudocts = () => {
                   </span>
                 </Container>
                 {buy ? (
-                  <Container
-                  sx={{mt:"30px",mr:"-5px"}}
-                  >
-                    <IconButton
-                      color="success"
-                      onClick={() => {
-                        dispatch(increment());
-                        setOrder(order + 1)
-                      }}
-                    >
+                  <Container sx={{ mt: "30px", mr: "-5px" }}>
+                    <IconButton color="success" onClick={Add}>
                       <AddIcon />
                     </IconButton>
                     <span style={{ marginLeft: "10px", marginRight: "10px" }}>
@@ -163,19 +203,20 @@ const DetailsProudocts = () => {
                     <IconButton
                       variant="contained"
                       color="error"
-                      onClick={() => {
-                        dispatch(decrement());
-                        setOrder(order - 1)
-                        if (order === 1) {
-                          okBuy(false);
-                        }
-                      }}
+                      onClick={Decrease}
                     >
                       <RemoveIcon />
                     </IconButton>
                   </Container>
                 ) : (
-                  <Button onClick={handleAddToCart} variant="outlined" color="success" sx={{mt:"30px",mr:"16px"}}>اضافه به سبد خرید</Button>
+                  <Button
+                    onClick={handleAddToCart}
+                    variant="outlined"
+                    color="success"
+                    sx={{ mt: "30px", mr: "16px" }}
+                  >
+                    اضافه به سبد خرید
+                  </Button>
                 )}
               </Container>
             </Box>

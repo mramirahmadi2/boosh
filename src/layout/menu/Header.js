@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
   AppBar,
   Button,
@@ -14,12 +14,13 @@ import {
 } from "@mui/material";
 import AddBusinessRoundedIcon from "@mui/icons-material/AddBusinessRounded";
 import DrawerComp from "./Draver";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 const Header = () => {
   const [value, setValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const count = useSelector((state) => state.counter.value);
+
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const cartPage = useNavigate();
@@ -30,7 +31,8 @@ const Header = () => {
     { name: "سرگرمی", Group: "Entertain" },
     { name: "آکادمیک", Group: "Academic" },
   ];
-
+  const location = useLocation();
+  console.log('location.pathname',location.pathname)
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,6 +44,7 @@ const Header = () => {
     setAnchorEl(null);
     setValue(1);
   };
+  
   return (
     <React.Fragment>
       <AppBar sx={{ background: "#063970" }}>
@@ -58,7 +61,7 @@ const Header = () => {
                 }}
               >
                 <Typography sx={{ fontSize: "2rem", mr: "20px" }}>
-                  Boosh.com
+                  Boosh.com 
                 </Typography>
                 <div>
                   <DrawerComp />

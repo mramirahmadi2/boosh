@@ -20,7 +20,10 @@ const CardBook = ({ books }) => {
                   <CardMedia
                     component="img"
                     height="140"
-                    image={`http://localhost:3002/files/${book.image}`}
+                    image={`http://localhost:3002/files/${book.image.replace(
+                      "/files/",
+                      ""
+                    )}`}
                     alt="green iguana"
                   />
                   <CardContent>
