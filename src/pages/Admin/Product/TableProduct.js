@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useFetch from "../../../UseFetch/useFetch";
 import {
   Paper,
   Table,
@@ -14,6 +13,7 @@ import RTL from "../../../RTL/Rtl";
 import NewProducts from "../../../component/modals/new products/newProducts";
 import EditProducts from "../../../component/modals/edit products/editProducts";
 import DeleteProducts from "../../../component/modals/delete products/deleteProducts";
+import axios from "axios";
 
 
 
@@ -21,11 +21,17 @@ const TableProduct = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [update,setUpdate] = useState(false);
-  const   {
-    error,
-    isPending,
-    data: books,
-  } = useFetch("http://localhost:3002/products");
+  const [book, setBook] = useState();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3002/products`)
+      .then((res) => {
+        setBook(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [update]);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -40,18 +46,14 @@ const TableProduct = () => {
     setPage(0);
   };
   const handleUpdate = () => {
-    console.log("hi",update)
-    update = true
-    console.log(update)
+    setUpdate(true)
   }
   
   return (
     <>
       <h1>محصولات</h1>
       <NewProducts onUpdate={() => handleUpdate()} />
-      {error && <div>{error}</div>}
-      {isPending && <div>درحال بارگذاری ...</div>}
-      {books && (
+      {book && (
         <RTL>
           <TableContainer component={Paper} sx={{ width: "91%", mb: "2%" }}>
             <Table>
@@ -64,7 +66,7 @@ const TableProduct = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {books
+                {book
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((book) => (
                     <TableRow key={book.id}>
@@ -72,7 +74,7 @@ const TableProduct = () => {
                       <TableCell>{book.writer}</TableCell>
                       <TableCell>{book.price}</TableCell>
                       <TableCell sx={{ display: "flex" }}>
-                        <EditProducts id={book.id} /> <DeleteProducts id={book.id} name={book.title} />
+                        <EditProducts id={book.id} onUpdate={() => handleUpdate()} /> <DeleteProducts id={book.id} name={book.title} onUpdate={() => handleUpdate()} />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -81,7 +83,7 @@ const TableProduct = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={books.length}
+              count={book.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

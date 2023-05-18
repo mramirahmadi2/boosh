@@ -23,7 +23,6 @@ const Home = () => {
   };
   useEffect(() => {
     user();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

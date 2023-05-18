@@ -16,13 +16,11 @@ import TableProduct from "../pages/Admin/Product/TableProduct";
 import CustomerInformationForm from "../pages/CustomerInformationForm/CustomerInformationForm";
 import Orders from "../pages/Admin/orders/Orders";
 import Complete from "../pages/Admin/Completion of orders/Complete";
+import SuccessPayment from "../pages/CustomerInformationForm/SuccesPayment";
 
-// import { headerAdmin } from "../component/checkHeader/headerSlice";
-// import { useEffect } from "react";
+
 
 const AppRoute = () => {
-  // const checkHeader = useSelector((state) => state.checkHeader.value);
-  // const isAdminHeder = useDispatch();
 
   return (
     <Router>
@@ -41,6 +39,8 @@ const AppRoute = () => {
             path="/CustomerInformationForm"
             element={<CustomerInformationForm />}
           />
+          <Route path="/SuccessPayment" element={<SuccessPayment />} />
+
           <Route path="/AdminPanl" element={<AdminPanl />} />
           <Route path="/AdminPanl/TableProduct" element={<TableProduct />} />
           <Route path="/AdminPanl/Orders" element={<Orders />} />

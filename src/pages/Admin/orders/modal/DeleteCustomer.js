@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Button, IconButton } from "@mui/material";
 import axios from "axios";
-import RTL from "../../../RTL/Rtl";
+import RTL from "../../../../RTL/Rtl";
 
 const style = {
   position: "absolute",
@@ -20,14 +20,14 @@ const style = {
 
 };
 
-export default function DeleteProducts({ id, name , onUpdate}) {
+export default function DeleteCustomer({ id, name , onUpdate}) {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleClick = async () => {
-    await axios.delete(`http://localhost:3002/products/${id}`).then(() => {
+    await axios.delete(`http://localhost:3002/orders/${id}`).then(() => {
       handleClose();
       onUpdate();
     });
@@ -47,10 +47,10 @@ export default function DeleteProducts({ id, name , onUpdate}) {
         <Box sx={style} dir="rtl">
           <RTL>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              حذف کتاب {name}
+              حذف مشتری {name}
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              آیا از حذف کتاب {name} اطمینان دارید؟
+            آیا از حذف مشتری {name} اطمینان دارید؟
             </Typography>
           </RTL>
           <Button onClick={handleClick} color="error">

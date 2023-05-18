@@ -1,13 +1,13 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-
+import MenuBooks from "../../menu books/MenuBooks";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, Container, IconButton, TextField } from "@mui/material";
-import useFetch from "../../../UseFetch/useFetch";
+import { Button, Container, IconButton, MenuItem, TextField } from "@mui/material";
 import RTL from "../../../RTL/Rtl";
 import axios from "axios";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -20,12 +20,13 @@ const style = {
   p: 4,
 };
 
-export default function EditProducts({ id }) {
+export default function EditProducts({ id, onUpdate }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [book, setBook] = React.useState({});
   const [image, setImage] = React.useState(null);
+
   React.useEffect(() => {
     axios
       .get(`http://localhost:3002/products/${id}`)
@@ -36,49 +37,47 @@ export default function EditProducts({ id }) {
         console.log(err);
       });
   }, [id]);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(book);
-    const formData = new FormData();
-    formData.append("title", book.title);
-    formData.append("group", book.group);
-    formData.append("writer", book.writer);
-    formData.append("price", book.price);
-    formData.append("number", book.number);
-    formData.append("category", book.category);
-    formData.append("images", image);
-    // axios
-    //   .put(`http://localhost:3002/products/${id}`, formData)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     handleClose();
-   
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const updatedData = {
+      title: book.title,
+      group: book.group,
+      writer: book.writer,
+      price: book.price,
+      number: book.number,
+      category: book.category,
+    };
 
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    axios.put(`http://localhost:3002/products/${id}`, formData).then((response) => {
-      console.log(response.status);
-      console.log(response.data);
-      console.log('ok Products')
-    });
-    axios.put(`http://localhost:3002/category/${id}`, formData).then((response) => {
-      console.log(response.status);
-      console.log(response.data);
-      console.log('ok Products')
-    });
+    const formData = new FormData();
+    if (image) {
+      formData.append("image", image);
+      formData.append("previousImage", book.image);
+      updatedData.image = formData;
+    } else {
+      updatedData.image = book.image;
+    }
+
+    axios
+      .put(`http://localhost:3002/products/${id}`, updatedData)
+      .then((response) => {
+        onUpdate();
+        setBook(response.data);
+        handleClose();
+      });
   };
+
   const handleInputChange = (e) => {
     setBook({
       ...book,
       [e.target.name]: e.target.value,
     });
   };
-
-  const handleFileInputChange = (e) => {
-    setImage(e.target.files[0]);
+  const handleFileInputChange = (event) => {
+    const file = event.target.files[0];
+    console.log("file", file);
+    setImage(file);
   };
+
   return (
     <div>
       <IconButton onClick={handleOpen}>
@@ -91,27 +90,25 @@ export default function EditProducts({ id }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} dir="rtl">
-          <Container sx={{ display: "flex"  }}>
+          <Container sx={{ display: "flex" }}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
               ویرایش کردن کتاب {book.title}
             </Typography>
-            
-              {book.image && (
-                <img
-                  src={`http://localhost:3002/files/${book.image.replace(
-                    "/files/",
-                    ""
-                  )}`}
-                  srcSet={`http://localhost:3002/files/${book.image.replace(
-                    "/files/",
-                    ""
-                  )}`}
-                  alt={book.title}
-                  loading="lazy"
-                  style={{ width: "25%", marginRight: "30px"  }}
-                />
-              )}
-            
+            {typeof book.image === "string" && (
+              <img
+                src={`http://localhost:3002/files/${book.image.replace(
+                  "/files/",
+                  ""
+                )}`}
+                srcSet={`http://localhost:3002/files/${book.image.replace(
+                  "/files/",
+                  ""
+                )}`}
+                alt={book.title}
+                loading="lazy"
+                style={{ width: "25%", marginRight: "30px" }}
+              />
+            )}
           </Container>
           <form onSubmit={handleSubmit}>
             <RTL>
@@ -134,7 +131,14 @@ export default function EditProducts({ id }) {
                 onChange={handleInputChange}
                 fullWidth
                 sx={{ mb: "15px" }}
-              />
+                select
+              >
+                {MenuBooks.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
               <TextField
                 id="writer"
                 name="writer"
@@ -172,7 +176,9 @@ export default function EditProducts({ id }) {
                 variant="outlined"
                 value={book.category}
                 onChange={handleInputChange}
+                rows={4}
                 fullWidth
+                multiline
                 sx={{ mb: "15px" }}
               />
             </RTL>
@@ -182,13 +188,11 @@ export default function EditProducts({ id }) {
             <input
               id="images"
               type="file"
-              value={book.images}
               onChange={handleFileInputChange}
               fullWidth
               dir="rtl"
               sx={{ mb: "20px" }}
             />
-
             <Container sx={{ disply: "flex", justifyContent: "start" }}>
               <Button type="submit" color="success">
                 ذخیره

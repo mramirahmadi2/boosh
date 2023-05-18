@@ -105,8 +105,8 @@ const DetailsProudocts = () => {
                 }}
               >{books.image && (
                 <img
-                  src={`http://localhost:3002/files/${books.image.replace('/files/', '')}`}
-                  srcSet={`http://localhost:3002/files/${books.image.replace('/files/', '')}`}
+                  src={`http://localhost:3002/files/${books.image?.replace("/files/", "")}`}
+                  srcSet={`http://localhost:3002/files/${books.image?.replace("/files/", "")}`}
                   alt={books.title}
                   loading="lazy"
                   style={{ width: "60%", marginLeft: "50px" }}

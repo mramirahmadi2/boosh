@@ -10,30 +10,33 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import * as Yup from "yup";
 import RTL from "../../RTL/Rtl";
 import { useDispatch, useSelector } from "react-redux";
-import { setCustomerInformation } from "../../component/customer/Customer";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CustomerInformationForm = () => {
   const totalPrice = useSelector((state) => state.price.value);
-  const customerInfromation = useDispatch();
+  const products = Object.values(localStorage).map((item) => JSON.parse(item));
+  const navigator = useNavigate();
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      familyName: "",
-      addres: "",
+      firstname: "",
+      lastname: "",
+      address: "",
       number: "",
       date: null,
       totalPrice: totalPrice,
+      products: products
     },
     validationSchema: Yup.object({
-      firstName: Yup.string()
+      firstname: Yup.string()
         .min(3, "نام باید بیشتر از 2 کارکتر باشد")
         .required("لطفا نام خود را وارد کنید"),
 
-      familyName: Yup.string()
+        lastname: Yup.string()
         .min(3, "فامیلی باید بیشتر از 2 کارکتر باشد")
         .required("لطفا فامیلی خود را وارد کنید"),
 
-      addres: Yup.string()
+        address: Yup.string()
         .min(10, "آدرس خود را کامل وارد کنید")
         .required("لطفا آدرس را وارد کنید"),
 
@@ -42,11 +45,15 @@ const CustomerInformationForm = () => {
         .min(11, "شماره تلفن صحیح نمی باشد")
         .required("تلفن خود را وارد نمایید"),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      customerInfromation(
-        setCustomerInformation(JSON.stringify(values, null, 2))
-      );
+    onSubmit: async (values) => {
+      try {
+        await axios.post("http://localhost:3002/orders", values);
+        alert("پرداخت با موفقیت انجام شد");
+        navigator("/SuccessPayment");
+      } catch (error) {
+        console.error("Error submitting form data:", error);
+        // Handle the error appropriately (e.g., show an error message to the user)
+      }
     },
   });
 
@@ -69,48 +76,48 @@ const CustomerInformationForm = () => {
                 }}
               >
                 <Box>
-                  {formik.touched.firstName && formik.errors.firstName ? (
+                  {formik.touched.firstname && formik.errors.firstname ? (
                     <div
                       style={{
                         fontSize: "15px",
                         color: "red",
                       }}
                     >
-                      {formik.errors.firstName}
+                      {formik.errors.firstname}
                     </div>
                   ) : null}
                   <TextField
-                    id="firstName"
+                    id="firstname"
                     label="نام"
                     multiline
                     maxRows={4}
-                    name="firstName"
-                    value={formik.values.firstName}
+                    name="firstname"
+                    value={formik.values.firstname}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
                 </Box>
 
                 <Box>
-                  {formik.touched.familyName && formik.errors.familyName ? (
+                  {formik.touched.lastname && formik.errors.lastname ? (
                     <div
                       style={{
                         fontSize: "15px",
                         color: "red",
                       }}
                     >
-                      {formik.errors.familyName}
+                      {formik.errors.lastname}
                     </div>
                   ) : null}
                   <TextField
-                    id="familyName"
+                    id="lastname"
                     label="فامیلی"
                     multiline
                     maxRows={4}
-                    name="familyName"
+                    name="lastname"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.familyName}
+                    value={formik.values.lastname}
                   />
                 </Box>
               </Box>
@@ -121,25 +128,25 @@ const CustomerInformationForm = () => {
                 }}
               >
                 <Box>
-                  {formik.touched.addres && formik.errors.addres ? (
+                  {formik.touched.address && formik.errors.address ? (
                     <div
                       style={{
                         fontSize: "15px",
                         color: "red",
                       }}
                     >
-                      {formik.errors.addres}
+                      {formik.errors.address}
                     </div>
                   ) : null}
                   <TextField
-                    id="addres"
+                    id="address"
                     label="آدرس"
                     multiline
                     maxRows={4}
-                    name="addres"
+                    name="address"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.addres}
+                    value={formik.values.address}
                   />
                 </Box>
 
@@ -175,7 +182,7 @@ const CustomerInformationForm = () => {
                 }}
               >
                 <Box>
-                  <span>تاریخ</span>
+                  <span> تاریخ ارسال</span>
                   <br />
                   <DatePicker
                     locale={persian_fa}

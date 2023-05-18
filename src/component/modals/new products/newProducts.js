@@ -1,12 +1,11 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-
+import MenuBooks from "../../menu books/MenuBooks";
 import Modal from "@mui/material/Modal";
-import { Container, TextField, Typography } from "@mui/material";
+import { Container, MenuItem, TextField, Typography } from "@mui/material";
 import RTL from "../../../RTL/Rtl";
-import { useDispatch } from "react-redux";
-import { setUpdate } from "../../update/UpdatePage";
+
 
 const style = {
   position: "absolute",
@@ -23,7 +22,6 @@ const style = {
 export default function NewProducts(props) {
   const [open, setOpen] = React.useState(false);
   const [addProduct, setAddProduct] = React.useState([]);
-  const dispach = useDispatch();
 
   const [formData, setFormData] = React.useState({
     title: "",
@@ -63,9 +61,7 @@ export default function NewProducts(props) {
       .then(() => {
         console.log("new product added");
         setAddProduct(addProduct.concat([data]));
-        dispach(setUpdate(true))
         handleClose();
-        window.location.reload();
         props.onUpdate();
       })
       .catch((error) => {
@@ -74,6 +70,15 @@ export default function NewProducts(props) {
   };
   const handleOpen = () => {
     setOpen(true);
+    setFormData({
+      title: "",
+      writer: "",
+      price: "",
+      number: "",
+      category: "",
+      imageUrl: "",
+      group: "",
+    });
   };
   const handleClose = () => {
     setOpen(false);
@@ -106,12 +111,19 @@ export default function NewProducts(props) {
                 id="group"
                 name="group"
                 label="گروه"
+                select
                 variant="outlined"
                 value={formData.group}
                 onChange={handleInputChange}
                 fullWidth
                 sx={{ mb: "15px" }}
-              />
+              >
+                {MenuBooks.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
               <TextField
                 id="writer"
                 name="writer"
@@ -151,6 +163,8 @@ export default function NewProducts(props) {
                 onChange={handleInputChange}
                 fullWidth
                 sx={{ mb: "15px" }}
+                multiline
+                rows={4}
               />
             </RTL>
             <Typography sx={{ mb: "15px" }}>

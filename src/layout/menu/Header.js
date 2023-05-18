@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Button,
@@ -24,7 +24,7 @@ const Header = () => {
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const cartPage = useNavigate();
-  const AdminPanl = useNavigate()
+  const AdminPanl = useNavigate();
   const mnueProduct = [
     { name: "رمان", Group: "Novel" },
     { name: "آموزشی", Group: "Education" },
@@ -32,7 +32,7 @@ const Header = () => {
     { name: "آکادمیک", Group: "Academic" },
   ];
   const location = useLocation();
-  console.log('location.pathname',location.pathname)
+  console.log("location.pathname", location.pathname);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -44,7 +44,7 @@ const Header = () => {
     setAnchorEl(null);
     setValue(1);
   };
-  
+
   return (
     <React.Fragment>
       <AppBar sx={{ background: "#063970" }}>
@@ -61,7 +61,7 @@ const Header = () => {
                 }}
               >
                 <Typography sx={{ fontSize: "2rem", mr: "20px" }}>
-                  Boosh.com 
+                  Boosh.com
                 </Typography>
                 <div>
                   <DrawerComp />
@@ -126,10 +126,15 @@ const Header = () => {
                   >
                     {count > 0 ? `سبد خرید ${count}` : "سبد خرید"}
                   </Button>
-                  <Button variant="contained"  onClick={() => {
+                  <Button
+                    variant="contained"
+                    onClick={() => {
                       AdminPanl("/LogInAdmin");
                       setValue();
-                    }}>پنل ادمین</Button>
+                    }}
+                  >
+                    پنل ادمین
+                  </Button>
                 </Container>
               </Container>
               <Menu
