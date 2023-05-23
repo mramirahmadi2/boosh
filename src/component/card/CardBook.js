@@ -14,18 +14,22 @@ const CardBook = ({ books }) => {
       <Grid container spacing={2}>
         {books.map((book) => (
           <Grid item xs={12} sm={6} md={4} key={book.id}>
+          
+            {/* #E1F7E1 */}
             <Card
-              sx={{ maxWidth: 345, mt: "30px", backgroundColor: "#E1F7E1" }}
+              sx={{ maxWidth: 345, mt: "30px", backgroundColor: "#F6FAF3" ,borderRadius: '20px'}}
             >
               <CardActionArea component={Link} to={`/DetailsBook/${book.id}`}>
               {typeof book.image === 'string' && (  <CardMedia
                   component="img"
-                  height="140"
+                  height="250"
+                  
                   image={`http://localhost:3002/files/${book.image.replace(
                     "/files/",
                     ""
                   )}`}
                   alt={book.title}
+                  sx={{width:"80%",marginRight:"10%",marginBottom:"5%",marginTop:"5%"}}
                 />)}
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">

@@ -4,6 +4,7 @@ import CardBook from "../../component/card/CardBook";
 import PaginationComponent from "../../component/pagination/PaginationRanges";
 import { useDispatch } from "react-redux";
 import { headerAdmin } from "../../component/checkHeader/headerSlice";
+import { Typography } from "@mui/material";
 
 const Home = () => {
   const {
@@ -30,7 +31,7 @@ const Home = () => {
       {isPending && <div>درحال بارگذاری ...</div>}
       {Book && (
         <div>
-          <h1>کتاب فروشی بوش WWW.BooSh.com</h1>
+          <Typography variant="h4" gutterBottom>به کتاب فروشی بوش خوش آمدید</Typography>
           <CardBook books={Book.slice((page - 1) * pageSize, page * pageSize)} />
           <PaginationComponent
             count={pageCount}

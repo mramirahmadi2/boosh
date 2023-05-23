@@ -18,7 +18,7 @@ const DetailsProudocts = () => {
   const count = useSelector((state) => state.counter.value);
   const [buy, okBuy] = useState(false);
   const [order, setOrder] = useState(0);
-  
+
   const dispatch = useDispatch();
   const { id } = useParams();
   const {
@@ -28,7 +28,7 @@ const DetailsProudocts = () => {
   } = useFetch("http://localhost:3002/products/" + id);
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
-  
+
   const handleAddToCart = () => {
     okBuy(true);
     dispatch(increment());
@@ -103,16 +103,31 @@ const DetailsProudocts = () => {
                   flexDirection: "column",
                   alignItems: "center",
                 }}
-              >{books.image && (
-                <img
-                  src={`http://localhost:3002/files/${books.image?.replace("/files/", "")}`}
-                  srcSet={`http://localhost:3002/files/${books.image?.replace("/files/", "")}`}
-                  alt={books.title}
-                  loading="lazy"
-                  style={{ width: "60%", marginLeft: "50px" }}
-                />
-              )}
-              
+              >
+                {books.image && (
+                  <Container
+                  sx={{
+                    borderRadius: "15px",
+                    backgroundColor: "white",
+                    width: "60%",
+                  }}
+                  >
+                    <img
+                      src={`http://localhost:3002/files/${books.image?.replace(
+                        "/files/",
+                        ""
+                      )}`}
+                      srcSet={`http://localhost:3002/files/${books.image?.replace(
+                        "/files/",
+                        ""
+                      )}`}
+                      alt={books.title}
+                      loading="lazy"
+                      style={{ width: "80%", height: "90%" , marginRight:"10%", marginTop:"5%" }}
+                    />
+                  </Container>
+                )}
+
                 <Container
                   sx={{
                     display: "flex",
@@ -138,22 +153,32 @@ const DetailsProudocts = () => {
                       marginRight: "-25px",
                     }}
                   >
-                    <IconButton
-                      color="success"
-                      onClick={() => dispatch(increment())}
-                    >
+                    {buy ? (
+                  <Container sx={{ mt: "30px", mr: "-5px" }}>
+                    <IconButton color="success" onClick={Add}>
                       <AddIcon />
                     </IconButton>
                     <span style={{ marginLeft: "10px", marginRight: "10px" }}>
-                      {count}
+                      {order}
                     </span>
                     <IconButton
                       variant="contained"
                       color="error"
-                      onClick={() => dispatch(decrement())}
+                      onClick={Decrease}
                     >
                       <RemoveIcon />
                     </IconButton>
+                  </Container>
+                ) : (
+                  <Button
+                    onClick={handleAddToCart}
+                    variant="outlined"
+                    color="success"
+                    sx={{ mt: "30px", mr: "16px" }}
+                  >
+                    اضافه به سبد خرید
+                  </Button>
+                )}
                   </Container>
                 </Container>
               </Box>
@@ -168,16 +193,30 @@ const DetailsProudocts = () => {
                 display: "flex",
               }}
             >
-              <img
-                src={`http://localhost:3002/files/${books.image.replace('/files/', '')}`}
-                srcSet={`http://localhost:3002/files/${books.image.replace('/files/', '')}`}
-                alt={books.title}
-                loading="lazy"
-                style={{ width: "30%" }}
-              />
+              <Container
+                sx={{
+                  borderRadius: "15px",
+                  backgroundColor: "white",
+                  width: "30%",
+                }}
+              >
+                <img
+                  src={`http://localhost:3002/files/${books.image.replace(
+                    "/files/",
+                    ""
+                  )}`}
+                  srcSet={`http://localhost:3002/files/${books.image.replace(
+                    "/files/",
+                    ""
+                  )}`}
+                  alt={books.title}
+                  loading="lazy"
+                  style={{ width: "80%", height: "90%" , marginRight:"10%", marginTop:"5%" }}
+                />
+              </Container>
               <Container>
                 <h1>{books.title}</h1>
-                <p style={{ width: "50%", marginRight: "20px" }}>
+                <p style={{ width: "80%", marginRight: "20px" }}>
                   {books.category}
                 </p>
                 <Container
