@@ -45,7 +45,8 @@ export default function CheckCustomer({ id, name, onUpdate }) {
         address: customer.address,
         number: customer.number,
         totalPrice: customer.totalPrice,
-        date:customer.date
+        date:customer.date,
+        products:customer.products
       };
     try {
       await axios.post(`http://localhost:3002/posts`, posts);

@@ -14,10 +14,12 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
+  height:620,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  overflowY: "auto",
 };
 
 export default function EditProducts({ id, onUpdate }) {
@@ -91,7 +93,7 @@ export default function EditProducts({ id, onUpdate }) {
       >
         <Box sx={style} dir="rtl">
           <Container sx={{ display: "flex" }}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
+            <Typography id="modal-modal-title" variant="body1" component="h2">
               ویرایش کردن کتاب {book.title}
             </Typography>
             {typeof book.image === "string" && (
@@ -106,7 +108,7 @@ export default function EditProducts({ id, onUpdate }) {
                 )}`}
                 alt={book.title}
                 loading="lazy"
-                style={{ width: "25%", marginRight: "30px" }}
+                style={{ width: "20%", marginRight: "30px" }}
               />
             )}
           </Container>

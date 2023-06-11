@@ -1,12 +1,20 @@
 import { Box, Container, Typography } from "@mui/material";
 import { green } from "@mui/material/colors";
 import { useState, useEffect } from "react";
+import { incrementByAmount } from "../../component/counter/conterSlice";
+import { clearCustomerInformation } from "../../component/customer/Customer";
+
+import { useDispatch } from "react-redux";
+
 const SuccessPayment = () => {
     const [paymentNumber, setPaymentNumber] = useState("");
-
+    const dispatch = useDispatch();
     useEffect(() => {
       const randomNumber = Math.floor(10000 + Math.random() * 90000);
       setPaymentNumber(randomNumber.toString());
+      localStorage.clear();
+      dispatch(incrementByAmount(0))
+      dispatch(clearCustomerInformation([]))
     }, []);
   return (
     <>

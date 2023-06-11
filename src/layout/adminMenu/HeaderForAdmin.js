@@ -11,13 +11,10 @@ import {
   useTheme,
 } from "@mui/material";
 import AddBusinessRoundedIcon from "@mui/icons-material/AddBusinessRounded";
-import DrawerComp from "./Draver";
 import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [value, setValue] = useState(0);
-  const theme = useTheme();
-  const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const BookShoop = useNavigate();
 
   return (
@@ -25,25 +22,7 @@ const Header = () => {
       <AppBar sx={{ background: "#063970" }}>
         <Toolbar>
           <AddBusinessRoundedIcon sx={{ transform: "scale(2)", mr: "10%" }} />
-          {isMatch ? (
-            <>
-              <Container
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-
-                  alignItems: "center",
-                }}
-              >
-                <Typography sx={{ fontSize: "2rem", mr: "20px" }}>
-                  Boosh.com
-                </Typography>
-                <div>
-                  <DrawerComp />
-                </div>
-              </Container>
-            </>
-          ) : (
+          
             <>
               <Container
                 sx={{ display: "flex", justifyContent: "space-between" }}
@@ -92,7 +71,7 @@ const Header = () => {
                 </Container>
               </Container>
             </>
-          )}
+         
         </Toolbar>
       </AppBar>
     </React.Fragment>

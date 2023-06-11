@@ -16,23 +16,15 @@ import AddBusinessRoundedIcon from "@mui/icons-material/AddBusinessRounded";
 import DrawerComp from "./Draver";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import MenuBooks from "../../component/menu books/MenuBooks"
 const Header = () => {
   const [value, setValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const count = useSelector((state) => state.counter.value);
-
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const cartPage = useNavigate();
   const AdminPanl = useNavigate();
-  const mnueProduct = [
-    { name: "رمان", Group: "Novel" },
-    { name: "آموزشی", Group: "Education" },
-    { name: "سرگرمی", Group: "Entertain" },
-    { name: "آکادمیک", Group: "Academic" },
-  ];
-  const location = useLocation();
-  console.log("location.pathname", location.pathname);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -146,14 +138,14 @@ const Header = () => {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                {mnueProduct.map((product, index) => (
+                {MenuBooks.map((product, index) => (
                   <MenuItem
                     key={index}
                     onClick={handleProductMnue}
                     component={Link}
-                    to={`/Products/${product.Group}`}
+                    to={`/Products/${product.value}`}
                   >
-                    {product.name}
+                    {product.label}
                   </MenuItem>
                 ))}
               </Menu>

@@ -9,14 +9,15 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import * as Yup from "yup";
 import RTL from "../../RTL/Rtl";
-import {  useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import {setCustomerInformation} from "../../component/customer/Customer"
 
 const CustomerInformationForm = () => {
   const totalPrice = useSelector((state) => state.price.value);
   const products = Object.values(localStorage).map((item) => JSON.parse(item));
   const navigator = useNavigate();
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       firstname: "",
@@ -45,11 +46,10 @@ const CustomerInformationForm = () => {
         .min(11, "شماره تلفن صحیح نمی باشد")
         .required("تلفن خود را وارد نمایید"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: () => {
       try {
-        await axios.post("http://localhost:3002/orders", values);
-        alert("پرداخت با موفقیت انجام شد");
-        navigator("/SuccessPayment");
+        dispatch(setCustomerInformation(formik.values));
+        navigator("/bankPayment");
       } catch (error) {
         console.error("Error submitting form data:", error);
         // Handle the error appropriately (e.g., show an error message to the user)
