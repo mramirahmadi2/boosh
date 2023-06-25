@@ -1,4 +1,13 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from "@mui/material";
 import RTL from "../../../RTL/Rtl";
 import DeleteCustomer from "./modal/DeleteCustomer";
 import CheckCustomer from "./modal/CheckCustomer";
@@ -20,6 +29,7 @@ const Complete = () => {
       .catch((err) => {
         console.log(err);
       });
+    setUpdate(false);
   }, [update]);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

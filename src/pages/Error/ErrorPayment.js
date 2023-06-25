@@ -1,8 +1,13 @@
 import { Box, Container, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { clearCustomerInformation } from "../../component/customer/Customer";
 const SuccessPayment = () => {
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(clearCustomerInformation([]))
+  }, []);
   return (
     <>
       <Box

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { decrement, increment } from "../../component/counter/conterSlice";
+import { decrement, increment, incrementByAmount } from "../../component/counter/conterSlice";
 import { useNavigate } from "react-router-dom";
 import { setTotalPrice } from "../../component/price/totalPriceSlice";
 import RTL from "../../RTL/Rtl";
@@ -42,6 +42,7 @@ const CartBoosh = () => {
   const clearCart = () => {
     localStorage.clear();
     setCartChanged(true);
+    dispatch(incrementByAmount(0))
   };
 
   const increaseQuantity = (product) => {

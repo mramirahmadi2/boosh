@@ -30,6 +30,7 @@ const Orders = () => {
       .catch((err) => {
         console.log(err);
       });
+    setUpdate(false);
   }, [update]);
 
   const handleChangePage = (event, newPage) => {
@@ -69,7 +70,9 @@ const Orders = () => {
                     <TableCell>{customer.lastname}</TableCell>
                     <TableCell>{customer.number}</TableCell>
                     <TableCell>{customer.totalPrice} تومان</TableCell>
-                    <TableCell><DetailsProducts id={customer.id}/></TableCell>
+                    <TableCell>
+                      <DetailsProducts id={customer.id} />
+                    </TableCell>
                     <TableCell sx={{ display: "flex" }}>
                       <DeleteCustomer
                         id={customer.id}

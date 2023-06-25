@@ -33,7 +33,7 @@ const BankPayment = () => {
         }}
         variant="contained"
         color="error"
-        onClick={navigator("/ErrorPayment")}
+        onClick={()=>navigator("/ErrorPayment")}
       >
         انصراف
       </Button>
