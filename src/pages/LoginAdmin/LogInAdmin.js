@@ -30,7 +30,7 @@ function Login() {
       const nameSH = values.name;
       const pasword = values.password;
       if (nameSH === username && pasword === passwordAdmin) {
-        navigate("/AdminPanl/TableProduct");
+        navigate("/AdminPanl/ManageProducts");
       } else {
         setWithoutPermission(true);
       }

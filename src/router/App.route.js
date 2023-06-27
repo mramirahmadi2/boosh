@@ -10,9 +10,9 @@ import Home from "../pages/Home/Home";
 import DetailsProudocts from "../pages/Proudocts/DetailsProudoct";
 import Products from "../pages/Proudocts/Proudocts";
 import CartBoosh from "../pages/Cart/CartBoosh";
-import LogInAdmin from "../pages/Admin/LogInAdmin";
+import LogInAdmin from "../pages/LoginAdmin/LogInAdmin";
 import AdminPanl from "../pages/Admin/AdminPanl";
-import TableProduct from "../pages/Admin/Product/TableProduct";
+import ManageProducts from "../pages/Admin/Product/ManageProducts";
 import CustomerInformationForm from "../pages/CustomerInformationForm/CustomerInformationForm";
 import Orders from "../pages/Admin/orders/Orders";
 import Complete from "../pages/Admin/Completion of orders/Complete";
@@ -43,7 +43,7 @@ const AppRoute = () => {
           <Route path="/ErrorPayment" element={<ErrorPayment />} />
           <Route path="/bankPayment" element={<BankPayment />} />
           <Route path="/AdminPanl" element={<AdminPanl />} />
-          <Route path="/AdminPanl/TableProduct" element={<TableProduct />} />
+          <Route path="/AdminPanl/ManageProducts" element={<ManageProducts />} />
           <Route path="/AdminPanl/Orders" element={<Orders />} />
           <Route path="/AdminPanl/Complete" element={<Complete />} />
         </Routes>

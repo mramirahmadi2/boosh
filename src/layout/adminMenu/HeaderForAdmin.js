@@ -41,7 +41,7 @@ const Header = () => {
                     <Tab
                       component={Link}
                       label="محصولات"
-                      to="/AdminPanl/TableProduct"
+                      to="/AdminPanl/ManageProducts"
                       sx={{ color: "white", fontWeight: 600 }}
                     />
                     <Tab

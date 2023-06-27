@@ -1,12 +1,12 @@
+
 import * as React from "react";
 import Box from "@mui/material/Box";
-import MenuBooks from "../../menu books/MenuBooks";
-import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import MenuBooks from "../../../../../component/menu books/MenuBooks";
 import Modal from "@mui/material/Modal";
-import EditIcon from "@mui/icons-material/Edit";
-import { Button, Container, IconButton, MenuItem, TextField } from "@mui/material";
-import RTL from "../../../RTL/Rtl";
-import axios from "axios";
+import { Container, MenuItem, TextField, Typography } from "@mui/material";
+import RTL from "../../../../../RTL/Rtl";
+
 
 const style = {
   position: "absolute",
@@ -19,72 +19,77 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-  overflowY: "auto",
 };
 
-export default function EditProducts({ id, onUpdate }) {
+export default function NewProducts({onUpdate}) {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [book, setBook] = React.useState({});
-  const [image, setImage] = React.useState(null);
+  const [addProduct, setAddProduct] = React.useState([]);
 
-  React.useEffect(() => {
-    axios
-      .get(`http://localhost:3002/products/${id}`)
-      .then((res) => {
-        setBook(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [id]);
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const updatedData = {
-      title: book.title,
-      group: book.group,
-      writer: book.writer,
-      price: book.price,
-      number: book.number,
-      category: book.category,
-    };
+  const [formData, setFormData] = React.useState({
+    title: "",
+    writer: "",
+    price: "",
+    number: "",
+    category: "",
+    imageUrl: "",
+    group: "",
+  });
 
-    const formData = new FormData();
-    if (image) {
-      formData.append("image", image);
-      formData.append("previousImage", book.image);
-      updatedData.image = formData;
-    } else {
-      updatedData.image = book.image;
-    }
-
-    axios
-      .put(`http://localhost:3002/products/${id}`, updatedData)
-      .then((response) => {
-        onUpdate();
-        setBook(response.data);
-        handleClose();
-      });
-  };
-
-  const handleInputChange = (e) => {
-    setBook({
-      ...book,
-      [e.target.name]: e.target.value,
-    });
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
   };
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
     console.log("file", file);
-    setImage(file);
+    setFormData({ ...formData, image: file });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("writer", formData.writer);
+    data.append("price", formData.price);
+    data.append("number", formData.number);
+    data.append("category", formData.category);
+    data.append("group", formData.group);
+    data.append("image", event.target.elements.images.files[0]);
+
+    fetch("http://localhost:3002/products", {
+      method: "POST",
+      body: data,
+    })
+      .then(() => {
+        console.log("new product added");
+        setAddProduct(addProduct.concat([data]));
+        handleClose();
+        
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+  const handleOpen = () => {
+    onUpdate();
+    setOpen(true);
+    setFormData({
+      title: "",
+      writer: "",
+      price: "",
+      number: "",
+      category: "",
+      imageUrl: "",
+      group: "",
+    });
+  };
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
     <div>
-      <IconButton onClick={handleOpen}>
-        <EditIcon />
-      </IconButton>
+      <Button onClick={handleOpen}>افزودن محصول</Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -92,34 +97,15 @@ export default function EditProducts({ id, onUpdate }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} dir="rtl">
-          <Container sx={{ display: "flex" }}>
-            <Typography id="modal-modal-title" variant="body1" component="h2">
-              ویرایش کردن کتاب {book.title}
-            </Typography>
-            {typeof book.image === "string" && (
-              <img
-                src={`http://localhost:3002/files/${book.image.replace(
-                  "/files/",
-                  ""
-                )}`}
-                srcSet={`http://localhost:3002/files/${book.image.replace(
-                  "/files/",
-                  ""
-                )}`}
-                alt={book.title}
-                loading="lazy"
-                style={{ width: "20%", marginRight: "30px" }}
-              />
-            )}
-          </Container>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} enctype="multipart/form-data">
+            <p>افزودن محصول</p>
             <RTL>
               <TextField
                 id="title"
                 name="title"
                 label="نام محصول"
                 variant="outlined"
-                value={book.title}
+                value={formData.title}
                 onChange={handleInputChange}
                 fullWidth
                 sx={{ mt: "5px", mb: "15px" }}
@@ -128,12 +114,12 @@ export default function EditProducts({ id, onUpdate }) {
                 id="group"
                 name="group"
                 label="گروه"
+                select
                 variant="outlined"
-                value={book.group}
+                value={formData.group}
                 onChange={handleInputChange}
                 fullWidth
                 sx={{ mb: "15px" }}
-                select
               >
                 {MenuBooks.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -146,7 +132,7 @@ export default function EditProducts({ id, onUpdate }) {
                 name="writer"
                 label="نویسنده"
                 variant="outlined"
-                value={book.writer}
+                value={formData.writer}
                 onChange={handleInputChange}
                 fullWidth
                 sx={{ mb: "15px" }}
@@ -156,7 +142,7 @@ export default function EditProducts({ id, onUpdate }) {
                 name="price"
                 label="قیمت"
                 variant="outlined"
-                value={book.price}
+                value={formData.price}
                 onChange={handleInputChange}
                 fullWidth
                 sx={{ mb: "15px" }}
@@ -166,7 +152,7 @@ export default function EditProducts({ id, onUpdate }) {
                 name="number"
                 label="تعداد محصول"
                 variant="outlined"
-                value={book.number}
+                value={formData.number}
                 onChange={handleInputChange}
                 fullWidth
                 sx={{ mb: "15px" }}
@@ -176,12 +162,12 @@ export default function EditProducts({ id, onUpdate }) {
                 name="category"
                 label="شرح کالا"
                 variant="outlined"
-                value={book.category}
+                value={formData.category}
                 onChange={handleInputChange}
-                rows={4}
                 fullWidth
-                multiline
                 sx={{ mb: "15px" }}
+                multiline
+                rows={4}
               />
             </RTL>
             <Typography sx={{ mb: "15px" }}>
@@ -190,11 +176,13 @@ export default function EditProducts({ id, onUpdate }) {
             <input
               id="images"
               type="file"
+              value={formData.images}
               onChange={handleFileInputChange}
               fullWidth
               dir="rtl"
               sx={{ mb: "20px" }}
             />
+
             <Container sx={{ disply: "flex", justifyContent: "start" }}>
               <Button type="submit" color="success">
                 ذخیره

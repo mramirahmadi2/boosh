@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Button, IconButton } from "@mui/material";
 import axios from "axios";
-import RTL from "../../../RTL/Rtl";
+import RTL from "../../../../../RTL/Rtl";
 
 const style = {
   position: "absolute",
